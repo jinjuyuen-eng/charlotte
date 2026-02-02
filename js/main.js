@@ -25,13 +25,13 @@ async function init() {
     // 1. PoseEngine 초기화
     poseEngine = new PoseEngine("./my_model/");
     const { maxPredictions, webcam } = await poseEngine.init({
-      size: 200,
+      size: 400, // 200 -> 400
       flip: true
     });
 
     // 2. Stabilizer 초기화
     stabilizer = new PredictionStabilizer({
-      threshold: 0.7,
+      threshold: 0.4, // 값을 0.7에서 0.4로 낮춤 (더 잘 인식되도록)
       smoothingFrames: 3
     });
 
@@ -40,8 +40,8 @@ async function init() {
 
     // 4. 캔버스 설정
     const canvas = document.getElementById("canvas");
-    canvas.width = 200;
-    canvas.height = 200;
+    canvas.width = 400; // 200 -> 400
+    canvas.height = 400; // 200 -> 400
     ctx = canvas.getContext("2d");
 
     // 5. Label Container 설정
@@ -57,6 +57,11 @@ async function init() {
 
     // 7. PoseEngine 시작
     poseEngine.start();
+
+    // 8. GameEngine 시작
+    if (gameEngine) {
+      gameEngine.start({ containerId: "game-container" });
+    }
 
     stopBtn.disabled = false;
   } catch (error) {
@@ -77,7 +82,7 @@ function stop() {
     poseEngine.stop();
   }
 
-  if (gameEngine && gameEngine.isGameActive) {
+  if (gameEngine && gameEngine.isRunning) {
     gameEngine.stop();
   }
 
@@ -98,6 +103,9 @@ function handlePrediction(predictions, pose) {
   // 1. Stabilizer로 예측 안정화
   const stabilized = stabilizer.stabilize(predictions);
 
+  // Debug: 안정화된 결과 확인 (주석 해제 시 로그 출력)
+  // console.log("Stabilized:", stabilized);
+
   // 2. Label Container 업데이트
   for (let i = 0; i < predictions.length; i++) {
     const classPrediction =
@@ -105,12 +113,14 @@ function handlePrediction(predictions, pose) {
     labelContainer.childNodes[i].innerHTML = classPrediction;
   }
 
-  // 3. 최고 확률 예측 표시
-  const maxPredictionDiv = document.getElementById("max-prediction");
-  maxPredictionDiv.innerHTML = stabilized.className || "감지 중...";
+  // 3. 최고 확률 예측 표시 (삭제됨)
+  // const maxPredictionDiv = document.getElementById("max-prediction");
+  // maxPredictionDiv.innerHTML = stabilized.className || "감지 중...";
 
   // 4. GameEngine에 포즈 전달 (게임 모드일 경우)
-  if (gameEngine && gameEngine.isGameActive && stabilized.className) {
+
+  // 4. GameEngine에 포즈 전달
+  if (gameEngine && gameEngine.isRunning && stabilized.className) {
     gameEngine.onPoseDetected(stabilized.className);
   }
 }

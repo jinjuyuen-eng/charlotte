@@ -8,23 +8,25 @@
 </head>
 
 <body>
-  <h1>Catch the Fruits 🍎</h1>
-  <div class="button-container">
-    <button type="button" id="startBtn" onclick="init()">Start</button>
-    <button type="button" id="stopBtn" onclick="stop()" disabled>Stop</button>
-  </div>
-  <div id="game-container" class="game-container">
-    <canvas id="canvas"></canvas>
-    <div id="ui-layer">
-      <div id="score-board">Score: 0</div>
-      <div id="time-board">Time: 60</div>
-      <div id="life-board">❤️❤️❤️❤️❤️</div>
-      <div id="game-message" class="hidden">Ready?</div>
+  <div id="bg-wrapper">
+    <h1>Catch the Fruits 🍎</h1>
+    <div class="button-container">
+      <button type="button" id="startBtn" onclick="init()">Start</button>
+      <button type="button" id="stopBtn" onclick="stop()" disabled>Stop</button>
     </div>
-    <div id="player-basket">🐱</div>
-    <div id="item-layer"></div>
+    <div id="game-container" class="game-container">
+      <canvas id="canvas"></canvas>
+      <div id="ui-layer">
+        <div id="score-board">Score: 0</div>
+        <div id="time-board">Time: 60</div>
+        <div id="life-board">❤️❤️❤️❤️❤️</div>
+        <div id="game-message" class="hidden">Ready?</div>
+      </div>
+      <div id="player-basket">🐱</div>
+      <div id="item-layer"></div>
+    </div>
+    <div id="label-container"></div>
   </div>
-  <div id="label-container"></div>
 
   <!-- Teachable Machine 라이브러리 -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
